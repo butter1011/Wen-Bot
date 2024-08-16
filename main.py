@@ -12,6 +12,7 @@ from telegram import (
 from telegram.ext import (
     ContextTypes,
 )
+import asyncio
 from aiohttp import web
 from flask import Flask, request
 
@@ -24,14 +25,13 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
 # Telegram bot token
-SERVER = "https://triend-wenworldgame-05ef17649d0d.herokuapp.com"
-URL = ''
+SERVER = "https://triend-wenworldgame-bot-bf3ddd0213b1.herokuapp.com/"
+TOKEN = "7459681930:AAFOt3d0hKT7LgFiGfB7sLA9UjNVPPg2-RQ"
+TELEGRAM_URL = "https://api.telegram.org/bot{token}".format(token=TOKEN)
+WEBHOOK_URL = f'{SERVER}'
 
 app = Flask(__name__)
 bot = Bot(token=TOKEN)
-
-# Initialize dispatcher
-dispatcher = Dispatcher(bot, None, workers=4)
 
 def setInviterUserId(context: ContextTypes.DEFAULT_TYPE):
     if context.chat_data.get("inviter_id"):
@@ -56,7 +56,7 @@ def setUserId(context: ContextTypes.DEFAULT_TYPE):
     # Reply Buttons when click '/start'
     startGameButton = InlineKeyboardButton(
         text="💰 Start the Game!",
-        web_app=WebAppInfo("https://triend-wenworldgame-05ef17649d0d.herokuapp.com"),
+        web_app=WebAppInfo("https://telegram-1-triend.replit.app/"),
     )
 
     joinCommunityButton = InlineKeyboardButton(text="👤 Join Community",
@@ -133,12 +133,14 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             chat_id=update.effective_chat.id,
             text="An error occurred. Please try again later.")
 
-@app.route('/webhook', methods=['POST'])
-def webhook():
-    update = Update.de_json(request.get_json(force=True), bot)
-    dispatcher.process_update(update)
-    return 'ok'
+@app.route("/setwebhook/")
+def setwebhook():
+    s = requests.get("{telegram_url}/setWebhook?url={webhook_url}".format(telegram_url=TELEGRAM_URL,webhook_url=WEBHOOK_URL))
+  
+    if s:
+        return "Success"
+    else:
+        return "Fail"
 
 if __name__ == '__main__':
-    bot.set_webhook(URL)
-    app.run(port=8443)
+    app.run("0.0.0.0", port=8080)
