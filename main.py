@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 # Telegram bot token
 SERVER = "https://triend-wenworldgame-05ef17649d0d.herokuapp.com"
-# TOKEN = "7459681930:AAFOt3d0hKT7LgFiGfB7sLA9UjNVPPg2-RQ"
+TOKEN = "7459681930:AAFOt3d0hKT7LgFiGfB7sLA9UjNVPPg2-RQ"
 
 def setInviterUserId(context: ContextTypes.DEFAULT_TYPE):
     if context.chat_data.get("inviter_id"):
