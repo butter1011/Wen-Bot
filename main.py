@@ -33,8 +33,7 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
 # Telegram bot token
-TOKEN = "7459681930:AAFOt3d0hKT7LgFiGfB7sLA9UjNVPPg2-RQ"
-SERVER = "https://telegram-1-triend.replit.app"
+SERVER = "https://triend-wenworldgame-05ef17649d0d.herokuapp.com"
 URL = ''
 
 app = Flask(__name__)
