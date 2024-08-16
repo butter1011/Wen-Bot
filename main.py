@@ -7,14 +7,16 @@ from telegram import (
     InlineKeyboardMarkup,
     WebAppInfo,
     Update,
-    Bot
 )
 from telegram.ext import (
+    Application,
+    CallbackContext,
+    CommandHandler,
     ContextTypes,
+    filters,
 )
 import asyncio
 from aiohttp import web
-from flask import Flask, request
 
 # Enable logging
 logging.basicConfig(
@@ -25,12 +27,8 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
 # Telegram bot token
-SERVER = "https://triend-wenworldgame-bot-bf3ddd0213b1.herokuapp.com/"
-TELEGRAM_URL = "https://api.telegram.org/bot{token}".format(token=TOKEN)
-WEBHOOK_URL = f'{SERVER}'
+SERVER = "https://triend-wenworldgame-05ef17649d0d.herokuapp.com"
 
-app = Flask(__name__)
-bot = Bot(token=TOKEN)
 
 def setInviterUserId(context: ContextTypes.DEFAULT_TYPE):
     if context.chat_data.get("inviter_id"):
@@ -132,14 +130,21 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             chat_id=update.effective_chat.id,
             text="An error occurred. Please try again later.")
 
-@app.route("/setwebhook/")
-def setwebhook():
-    s = requests.get("{telegram_url}/setWebhook?url={webhook_url}".format(telegram_url=TELEGRAM_URL,webhook_url=WEBHOOK_URL))
-  
-    if s:
-        return "Success"
-    else:
-        return "Fail"
 
-if __name__ == '__main__':
-    app.run("0.0.0.0", port=8080)
+# Webhook handler
+async def handle(request):
+    data = await request.json()
+    update = Update.de_json(data, bot)
+    await application.update_queue.put(update)
+    return web.Response()
+
+
+if __name__ == "__main__":
+    application = Application.builder().token(TOKEN).build()
+
+    # Add handler to the bot
+    application.add_handler(CommandHandler("start", start))
+    # If running on Windows, set the event loop policy accordingly
+    if hasattr(asyncio, 'WindowsSelectorEventLoopPolicy'):
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+    application.run_polling(allowed_updates=Update.ALL_TYPES)
