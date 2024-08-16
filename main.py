@@ -10,17 +10,8 @@ from telegram import (
     Bot
 )
 from telegram.ext import (
-    Application,
-    CallbackContext,
-    CommandHandler,
     ContextTypes,
-    filters,
-    Dispatcher, 
-    CommandHandler, 
-    MessageHandler, 
-    Filters
 )
-import asyncio
 from aiohttp import web
 from flask import Flask, request
 
@@ -40,7 +31,7 @@ app = Flask(__name__)
 bot = Bot(token=TOKEN)
 
 # Initialize dispatcher
-dispatcher = Dispatcher(bot, None, workers=0)
+dispatcher = Dispatcher(bot, None, workers=4)
 
 def setInviterUserId(context: ContextTypes.DEFAULT_TYPE):
     if context.chat_data.get("inviter_id"):
