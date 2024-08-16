@@ -26,7 +26,6 @@ logger = logging.getLogger(__name__)
 
 # Telegram bot token
 SERVER = "https://triend-wenworldgame-bot-bf3ddd0213b1.herokuapp.com/"
-TOKEN = "7459681930:AAFOt3d0hKT7LgFiGfB7sLA9UjNVPPg2-RQ"
 TELEGRAM_URL = "https://api.telegram.org/bot{token}".format(token=TOKEN)
 WEBHOOK_URL = f'{SERVER}'
 
