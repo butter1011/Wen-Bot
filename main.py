@@ -65,7 +65,7 @@ def setUserId(context: ContextTypes.DEFAULT_TYPE):
     # Reply Buttons when click '/start'
     startGameButton = InlineKeyboardButton(
         text="💰 Start the Game!",
-        web_app=WebAppInfo("https://telegram-1-triend.replit.app/"),
+        web_app=WebAppInfo("https://triend-wenworldgame-05ef17649d0d.herokuapp.com"),
     )
 
     joinCommunityButton = InlineKeyboardButton(text="👤 Join Community",
